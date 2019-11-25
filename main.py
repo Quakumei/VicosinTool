@@ -13,6 +13,6 @@ if __name__ == "__main__" and not('--help' in sys.argv or '-h' in sys.argv):
 
     # TODO another class for asking for data. 
     # TODO menu (functions and run them)
-
+    # TODO add check for working token (function is ready already)
 elif '--help' in sys.argv or '-h' in sys.argv:
     sysrun('cat README.txt | less')
