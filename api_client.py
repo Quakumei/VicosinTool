@@ -8,18 +8,29 @@ import requests
 
 
 class VkApiClient:
-    api_server = "https://api.vk.com"
-    def __init__(self, token):
-        self.__token = token
-    
+    api_server = "https://api.vk.com/"
+    api_version = "5.52"
+
+    def get(self, what):
+        # wrapper for requests
+        # this makes you no need to add version and token manually
+        url = VkApiClient.api_server + what + "&access_token=" + \
+            self.__access_token + "&v=" + VkApiClient.api_version
+        return requests.get(url)
+
     def check_token(self):
-        user_id = 1 # it can be only int
-        api_version = "5.52" # idk if it can be another
-        req = "methods/users.get?user_id="+user_id+"&v="+api_version+"&access_token="+self.__token
-        #rewrite this part, make no duplication of access_token, put request into another functions
-        r = requests.get(VkApiClient.api_server+req)
-        r = r.json()
-        if r['response']['first_name']=="Pavel" and ['response']['last_name']=="Durov":
-            return True
+        # users.get=1, this is Pavel Durov, creator of VK and telegram.
+        # if this test crashes, then the token is invalid.
+        r = self.get('method/users.get?user_id=1').json()
+        if r["error"]:
+            pavel = False
         else:
-            return False
+            pavel = True
+        return pavel
+
+    def __init__(self, token, check=True):
+        self.__access_token = token
+        self.token_valid = self.check_token()
+        if not self.token_valid:
+            self.access_token = ""
+            raise ValueError("Invalid token")
