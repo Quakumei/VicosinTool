@@ -22,7 +22,7 @@ class VkApiClient:
         # users.get=1, this is Pavel Durov, creator of VK and telegram.
         # if this test crashes, then the token is invalid.
         r = self.get('method/users.get?user_id=1').json()
-        if r["error"]:
+        if 'error' in r:
             pavel = False
         else:
             pavel = True
