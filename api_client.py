@@ -9,26 +9,47 @@ import requests
 
 class VkApiClient:
     api_server = "https://api.vk.com/"
-    api_version = "5.52"
 
-    def get(self, what):
+    def get(self, what, version):
         # wrapper for requests
         # this makes you no need to add version and token manually
         url = VkApiClient.api_server + what + "&access_token=" + \
-            self.__access_token + "&v=" + VkApiClient.api_version
+            self.__access_token + "&v=" + version
         return requests.get(url)
 
     def check_token(self):
         # users.get=1, this is Pavel Durov, creator of VK and telegram.
         # if this test crashes, then the token is invalid.
-        r = self.get('method/users.get?user_id=1').json()
+        if self.verbosity:
+            print("[...] Checking token...")
+        version = '5.52'
+        r = self.get('method/users.get?user_id=1', version).json()
         if 'error' in r:
             pavel = False
         else:
             pavel = True
         return pavel
 
-    def __init__(self, token, check=True):
+    def get_friends_list(
+            self,
+            userid,
+            fields_list=['city', 'domain', 'sex'],
+            order='name'
+            ):
+
+        version = "5.103"
+        fields = ",".join(fields_list)
+
+        r = self.get(
+                "method/friends.get?user_id=" + userid +
+                "&order=" + order +
+                "&fields=" + fields,
+                version
+                )
+        return r.contents.json()
+
+    def __init__(self, token, verbosity=False, check=True):
+        self.verbosity = verbosity
         self.__access_token = token
         self.token_valid = self.check_token()
         if not self.token_valid:
