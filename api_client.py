@@ -38,15 +38,15 @@ class VkApiClient:
             ):
 
         version = "5.103"
-        fields = ",".join(fields_list)
+        fields = str(",".join(fields_list))
 
         r = self.get(
-                "method/friends.get?user_id=" + userid +
+                "method/friends.get?user_id=" + str(userid) +
                 "&order=" + order +
                 "&fields=" + fields,
                 version
                 )
-        return r.contents.json()
+        return r.json()
 
     def __init__(self, token, verbosity=False, check=True):
         self.verbosity = verbosity

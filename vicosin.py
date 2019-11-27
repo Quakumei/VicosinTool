@@ -8,6 +8,7 @@ I remind you that vicosin is a tool for creating reports.
 import argparse
 import sys
 from api_client import VkApiClient
+import data_parser
 
 VERSION = "0.0.0"  # It can't be called a program as it doesn't do it's job
 
@@ -97,6 +98,7 @@ if args.test:
 
 else:
     if args.friends:
+        # TODO custom fields + params
         client = make_client(access_token, args)
-
-    print (args)
+        response = client.get_friends_list(args.userid)
+        print (data_parser.FriendsDictToTable(response))
