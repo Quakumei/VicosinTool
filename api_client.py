@@ -48,6 +48,15 @@ class VkApiClient:
                 )
         return r.json()
 
+    def get_person(
+            self,
+            userid,
+            fields=[]  # May be needed later
+            ):
+        version = "5.52"
+        r = self.get("method/users.get?user_id=" + str(userid), version)
+        return r.json()
+
     def __init__(self, token, verbosity=False, check=True):
         self.verbosity = verbosity
         self.__access_token = token

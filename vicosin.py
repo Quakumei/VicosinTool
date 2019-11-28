@@ -13,9 +13,9 @@ import data_parser
 VERSION = "0.0.0"  # It can't be called a program as it doesn't do it's job
 
 # Arguments check
-parser = argparse.ArgumentParser()
-
-# Optional arguments
+parser = argparse.ArgumentParser(
+        description="OSINT tool for generating reports " +
+        "on Vk.com users using vk api")
 parser.add_argument(
         "--friends",
         help="generate [userid]'s friends' list",
@@ -101,4 +101,7 @@ else:
         # TODO custom fields + params
         client = make_client(access_token, args)
         response = client.get_friends_list(args.userid)
+        person_response = client.get_person(args.userid)
+        print ("Friends of " +
+               data_parser.DictToFirstLastName(person_response) + ":")
         print (data_parser.FriendsDictToTable(response))
