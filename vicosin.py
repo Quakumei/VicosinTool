@@ -37,6 +37,16 @@ parser.add_argument(
         help="add more text to output",
         action="store_true"
         )
+parser.add_argument(
+        "--fields",
+        help="specify (separated by comma) profile fields to return. Sample values: nickname, domain, sex, bdate, city, country, timezone, photo_50, photo_100, photo_200_orig, has_mobile, contacts, education, online, relation, last_seen, status, can_write_private_message, can_see_all_posts, can_post, universities. ",
+        type=str
+        )
+parser.add_argument(
+        "--separator",
+        help="set a string to separate table columns with",
+        type=str
+        )
 
 # Positional arguments
 if '--version' not in sys.argv:
@@ -52,10 +62,12 @@ if '--version' not in sys.argv:
                 type=int
                 )
 
+
+# Get arguments
 args = parser.parse_args()
 
 if args.version:
-    print ("VicosinTool v" + VERSION + " by Quakumei.")
+    print("VicosinTool v" + VERSION + " by Quakumei.")
     exit()
 
 # Read token
@@ -70,7 +82,7 @@ def make_client(token, args):
     Creates a VkApiClient object and return it
     '''
     if args.verbose:
-        print ("[...] Creating a client with following token: ", token)
+        print("[...] Creating a client with following token: ", token)
         verb = True
     else:
         verb = False
@@ -100,8 +112,28 @@ else:
     if args.friends:
         # TODO custom fields + params
         client = make_client(access_token, args)
-        response = client.get_friends_list(args.userid)
+        if args.separator:
+            separator = args.separator
+        else:
+            separator = " [|]"
+        # Get friends of the target
+        if args.fields:
+            response = client.get_friends_list(args.userid,
+                                               args.fields.split(","))
+        else:
+            response = client.get_friends_list(args.userid)
+
+        # Getting the name of target
         person_response = client.get_person(args.userid)
-        print ("Friends of " +
-               data_parser.DictToFirstLastName(person_response) + ":")
-        print (data_parser.FriendsDictToTable(response))
+
+        # Print the result
+        print("Friends of " +
+              data_parser.DictToFirstLastName(person_response) + ":")
+
+        if args.fields:
+            print(data_parser.FriendsDictToTable(response,
+                                                 args.fields.split(","),
+                                                 separator))
+        else:
+            print(data_parser.FriendsDictToTable(response,
+                                                 separator=separator))
