@@ -1,0 +1,47 @@
+import api_client
+
+
+class VicosinProcessor:
+    '''
+    Class for working with api_client
+    '''
+    def __init__(self, args):
+        self.args = args
+
+    def make_client(self, access_token):
+        '''
+        Creates VkApiClient object and return it
+        '''
+        # Get options from arguments
+        options = []
+        if self.args.verbose:
+            options += "verbose"
+
+        client = api_client.VkApiClient(
+                access_token,
+                options)
+        return client
+
+    def check_token(self, access_token):
+        '''
+        Returns True if token's good
+        '''
+        try:
+            self.make_client(access_token)
+        except ValueError:
+            return False
+        return True
+
+    def get_token(self):
+        '''
+        Return token or "" if not specified
+        '''
+        if self.args.access_token:
+            access_token = self.args.access_token
+        elif self.args.token_file:
+            with open(self.args.token_file, 'r') as tokenfile:
+                access_token = tokenfile.read().splitlines()[0]
+        else:
+            access_token = ""
+        return access_token
+# Read token
