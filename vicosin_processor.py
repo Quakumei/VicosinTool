@@ -7,11 +7,15 @@ class VicosinProcessor:
     '''
     def __init__(self, args):
         self.args = args
+        self.access_token = self.get_token()
 
-    def make_client(self, access_token):
+    def make_client(self, access_token=""):
         '''
         Creates VkApiClient object and return it
         '''
+        if access_token == "":
+            access_token = self.access_token
+
         # Get options from arguments
         options = []
         if self.args.verbose:
@@ -22,10 +26,14 @@ class VicosinProcessor:
                 options)
         return client
 
-    def check_token(self, access_token):
+    def check_token(
+            self,
+            access_token="null"):
         '''
         Returns True if token's good
         '''
+        if access_token == 'null':
+            access_token = self.access_token
         try:
             self.make_client(access_token)
         except ValueError:
@@ -44,4 +52,23 @@ class VicosinProcessor:
         else:
             access_token = ""
         return access_token
-# Read token
+
+    def get_user(
+            self,
+            user_id,
+            fields=[]
+            ):
+        '''
+        Returns info dict about user
+        '''
+        return self.make_client().get_user(user_id, fields)
+
+    def get_friends(
+            self,
+            user_id,
+            fields=['first_name', 'last_name', 'id']
+            ):
+        '''
+        Returns dict of friends of user_id
+        '''
+        return self.make_client().get_friends(user_id, fields)

@@ -1,6 +1,6 @@
 
 
-def FriendsDictToTable(
+def parse_friends_dict(
         friendict,
         fields=['first_name', 'last_name', 'id'],
         separator="|"
@@ -44,8 +44,12 @@ def FriendsDictToTable(
     return res
 
 
-def DictToFirstLastName(json):
-    a = json["response"][0]
-    first = a["first_name"]
-    last = a["last_name"]
-    return first + ' ' + last
+def parse_person_dict(
+        pdict,
+        fields=["first_name", "last_name"]
+        ):
+    person = pdict["response"][0]
+    res = ""
+    for field in fields:
+        res += str(person[field]) + " "
+    return res

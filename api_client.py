@@ -26,10 +26,10 @@ class VkApiClient:
         '''
         return True if token is valid
         '''
-        response = self.get_person(1)
+        response = self.get_user(1)
         return not ('error' in response)
 
-    def get_friends_list(
+    def get_friends(
             self,
             userid,
             fields_list=['domain', 'sex'],
@@ -53,9 +53,10 @@ class VkApiClient:
                 )
         return response.json()
 
-    def get_person(
+    def get_user(
             self,
             userid,
+            fields=[]
             ):
         version = "5.52"
         r = self.get(
