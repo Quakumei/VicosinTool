@@ -8,9 +8,9 @@ A: Python3, requests.
 Q: How to run?
 Linux A: 
     1) 'chmod +x vicosin.py' to make file executable
-    2) './vicosin.py --help' to use
+    2) './vicosin.py -h' to use
 Windows A:
-    1) 'python3 vicosin.py --help'
+    1) 'python3 vicosin.py -h'
 
 Q: How do I get the token?
 A: You get it in two steps:
