@@ -58,6 +58,11 @@ elif command == 'friends':
     else:
         fields = DEFAULT_FIELDS
 
+    if args.alive:
+        alive = True
+    else:
+        alive = False
+
     # Get data
     person_dict = processor.get_user(args.user_id)
     friends_dict = processor.get_friends(args.user_id, fields)
@@ -70,7 +75,8 @@ elif command == 'friends':
     friends_out = data_parser.parse_friends_dict(
             friends_dict,
             fields=fields,
-            separator=separator
+            separator=separator,
+            remove_dead=alive
             )
     print(person_out)
     print(friends_out)

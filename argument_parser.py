@@ -58,11 +58,17 @@ def parse_args():
             help="specify fields for the command (default for 'friends'" +
             'command: "first_name,last_name,id")')
 
-    # Optional arguments: --verbose
+    # Optional arguments: --verbose --alive
     parser.add_argument(
             "--verbose", "-v",
             action="store_true",
             help="add more text to output"
+            )
+
+    parser.add_argument(
+            "--alive", '-A',
+            action="store_true",
+            help="remove DELETED people from output"
             )
 
     return parser.parse_args()

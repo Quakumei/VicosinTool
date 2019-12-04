@@ -4,7 +4,8 @@ def parse_friends_dict(
         friendict,
         fields,
         separator=" |",
-        default_fieldlen=15
+        default_fieldlen=15,
+        remove_dead=False
         ):
     '''
     Converts response from get_friends_list to readable table <3
@@ -26,9 +27,10 @@ def parse_friends_dict(
 
     for friend in friendict['response']['items']:
         line = ""
-        for key in fields:
-            line += parse_entry(key, friend, separator, default_fieldlen)
-        res += line + '\n'
+        if not ('deactivated' in friend and remove_dead):
+            for key in fields:
+                line += parse_entry(key, friend, separator, default_fieldlen)
+            res += line + '\n'
     return res
 
 
@@ -39,6 +41,10 @@ def calc_fieldlen(field, default_fieldlen):
     elif field == "city":
         fieldlen = 16
     elif field == "bdate":
+        fieldlen = 11
+    elif field in ['mobile_phone', 'home_phone']:
+        fieldlen = 12
+    elif field == "id":
         fieldlen = 11
     else:
         fieldlen = default_fieldlen
@@ -93,8 +99,8 @@ def user_dict_to_data(
             data = user["city"]["title"]
         else:
             data = "-"
+
     elif field == "contacts":
-        # TODO column length!
         if "mobile_phone" in user:
             data = user["mobile_phone"]
         elif "home_phone" in user:
