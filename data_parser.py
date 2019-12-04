@@ -2,8 +2,9 @@
 
 def parse_friends_dict(
         friendict,
-        fields=['first_name', 'last_name', 'id'],
-        separator="|"
+        fields,
+        separator=" |",
+        default_fieldlen=15
         ):
     '''
     Converts response from get_friends_list to readable table <3
@@ -13,8 +14,11 @@ def parse_friends_dict(
     line = ""
     equal_sign = ""
     for field in fields:
-        line += ("%15s" % str(field) + separator)
-        equal_sign += "="*(15+len(separator))
+        line += make_entry(
+                str(field),
+                separator,
+                calc_fieldlen(field, default_fieldlen))
+    equal_sign += "="*(len(line))
 
     res += equal_sign + '\n'
     res += line + '\n'
@@ -23,25 +27,78 @@ def parse_friends_dict(
     for friend in friendict['response']['items']:
         line = ""
         for key in fields:
-            if key == "sex":
-                if friend[key] == 2:
-                    line += ("%15s" % "male" + separator)
-                elif friend[key] == 1:
-                    line += ("%15s" % "female" + separator)
-                else:
-                    line += ("%15s" % "dafuq" + separator)
-            elif key == "has_mobile":
-                if "has_mobile" in friend:
-                    line += ("%15s" % "1" + separator)
-                else:
-                    line += ("%15s" % "NaN" + separator)
-            else:
-                if key in friend:
-                    line += ("%15s" % str(friend[key]) + separator)
-                else:
-                    line += ("%15s" % "null" + separator)
+            line += parse_entry(key, friend, separator, default_fieldlen)
         res += line + '\n'
     return res
+
+
+def calc_fieldlen(field, default_fieldlen):
+    if field == "sex" or field == "has_mobile":
+        fieldlen = len(field)+1
+    elif field == "city":
+        fieldlen = 16
+    else:
+        fieldlen = default_fieldlen
+    return fieldlen
+
+
+def parse_entry(
+        key,
+        user,
+        separator,
+        default_fieldlen):
+    '''
+    Retruns column part
+    '''
+    data = user_dict_to_data(user, key)
+    fieldlen = calc_fieldlen(key, default_fieldlen)
+    return make_entry(data, separator, fieldlen)
+
+
+def make_entry(
+        data,
+        separator,
+        fieldlen,
+        ):
+    return (("%"+str(fieldlen)+"s") % data + separator)
+
+
+def user_dict_to_data(
+        user,
+        field
+        ):
+    '''
+        Gets raw data to print
+    '''
+    data = ""
+    if field == "sex":
+        if user[field] == 2:
+            data += "m"
+        elif user[field] == 1:
+            data += "f"
+        else:
+            data += "-"
+
+    elif field == "has_mobile":
+        if "has_mobile" in user:
+            data += str(user["has_mobile"])
+        else:
+            data += "-"
+
+    elif field == "city":
+        if "city" in user:
+            data = user["city"]["title"]
+        else:
+            data = "-"
+
+    else:
+        # If no special case: first_name, last_name, id
+        if field in user:
+            data = str(user[field])
+        else:
+            data = "-"
+
+    return data
 
 
 def parse_person_dict(

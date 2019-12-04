@@ -46,6 +46,18 @@ def parse_args():
             help='''path to file which contains token''',
             )
 
+    parser.add_argument(
+            "--column-separator", "-cs",
+            type=str,
+            help='''specify separator for the columns (default: |)'''
+            )
+
+    parser.add_argument(
+            "--fields", "-f",
+            type=str,
+            help="specify fields for the command (default for 'friends'" +
+            'command: "first_name,last_name,id")')
+
     # Optional arguments: --verbose
     parser.add_argument(
             "--verbose", "-v",
