@@ -18,3 +18,6 @@ A: You get it in two steps:
 -- 2) Look at the URL you've been redirected to. There
 should be `access_token=[token]` in it. You should copy
 everything before the '&' symbol. That's your token, congrats!
+
+Q: Where can I check list of possible fields? 
+A: On the Vk API developers' site https://vk.com/dev/fields

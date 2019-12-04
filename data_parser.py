@@ -33,10 +33,13 @@ def parse_friends_dict(
 
 
 def calc_fieldlen(field, default_fieldlen):
-    if field == "sex" or field == "has_mobile":
+    ynfields = ['sex', 'has_mobile', 'online']
+    if field in ynfields:
         fieldlen = len(field)+1
     elif field == "city":
         fieldlen = 16
+    elif field == "bdate":
+        fieldlen = 11
     else:
         fieldlen = default_fieldlen
     return fieldlen
@@ -90,7 +93,14 @@ def user_dict_to_data(
             data = user["city"]["title"]
         else:
             data = "-"
-
+    elif field == "contacts":
+        # TODO column length!
+        if "mobile_phone" in user:
+            data = user["mobile_phone"]
+        elif "home_phone" in user:
+            data = user["home_phone"]
+        else:
+            data = "-"
     else:
         # If no special case: first_name, last_name, id
         if field in user:
