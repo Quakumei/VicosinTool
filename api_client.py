@@ -56,12 +56,13 @@ class VkApiClient:
     def get_user(
             self,
             userid,
-            fields=[]
+            fields=['first_name', 'last_name', 'id']
             ):
         version = "5.52"
         r = self.get(
                 "method/users.get" +
-                "?user_id=" + str(userid),
+                "?user_id=" + str(userid) +
+                "&fields=" + ",".join(fields),
                 version
                 )
         return r.json()

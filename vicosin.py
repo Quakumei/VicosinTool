@@ -81,6 +81,14 @@ elif command == 'friends':
     print(person_out)
     print(friends_out)
 
+elif command == "profile":
+    if args.fields:
+        fields = args.fields
+    else:
+        fields = ['first_name', 'last_name', 'id']
+    person_dict = processor.get_user(args.user_id, fields)
+    person_out = data_parser.parse_user_info(person_dict, fields)
+    print(person_out)
 
 else:
     print("Unknown command")
