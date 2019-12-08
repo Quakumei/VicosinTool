@@ -12,7 +12,8 @@ def parse_args():
 
     user_id_required = not ('test' in sys.argv or
                             'help' in sys.argv or
-                            'version' in sys.argv)
+                            'version' in sys.argv or
+                            'chatlist' in sys.argv)
     access_token_required = not ('help' in sys.argv or
                                  'version' in sys.argv or
                                  '-tf' in sys.argv or
