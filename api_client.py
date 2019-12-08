@@ -59,12 +59,41 @@ class VkApiClient:
             fields=['first_name', 'last_name', 'id']
             ):
         version = "5.52"
-        r = self.get(
-                "method/users.get" +
-                "?user_id=" + str(userid) +
-                "&fields=" + ",".join(fields),
-                version
-                )
+        if userid != "":
+            r = self.get(
+                    "method/users.get" +
+                    "?user_id=" + str(userid) +
+                    "&fields=" + ",".join(fields),
+                    version
+                    )
+        else:
+            r = self.get(
+                    "method/users.get" +
+                    "?fields=" + ",".join(fields),
+                    version
+                    )
+
+        return r.json()
+
+    def get_chat(
+            self,
+            chat_id,
+            fields=[]):
+        version = "5.103"
+        if fields != []:
+            r = self.get(
+                    "method/messages.getChat" +
+                    "?chat_id=" + str(chat_id) +
+                    "&fields=" + ",".join(fields),
+                    version
+                    )
+        else:
+            r = self.get(
+                    "method/messages.getChat" +
+                    "?chat_id=" + str(chat_id),
+                    version
+                    )
+        print(r.json())
         return r.json()
 
     def __init__(

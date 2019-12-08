@@ -61,7 +61,10 @@ class VicosinProcessor:
         '''
         Returns info dict about user
         '''
-        return self.make_client().get_user(user_id, fields)
+        if user_id != "":
+            return self.make_client().get_user(user_id, fields)
+        else:
+            return self.make_client().get_user("", fields)
 
     def get_friends(
             self,
@@ -72,3 +75,21 @@ class VicosinProcessor:
         Returns dict of friends of user_id
         '''
         return self.make_client().get_friends(user_id, fields)
+
+    def get_chat_info(
+            self,
+            chat_id,
+            ):
+        '''
+        messages.getChat implementation
+        '''
+        return self.make_client().get_chat(chat_id)
+
+    def get_chat_users(
+            self,
+            chat_id,
+            fields=["id"]):
+        '''
+        messages.getChat which returns info on chat users
+        '''
+        return self.make_client().get_chat(chat_id, fields)

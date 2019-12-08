@@ -31,6 +31,7 @@ def parse_friends_dict(
             for key in fields:
                 line += parse_entry(key, friend, separator, default_fieldlen)
             res += line + '\n'
+    res += equal_sign + '\n'
     return res
 
 
@@ -135,21 +136,27 @@ def parse_user_info(
     person = pdict["response"][0]
     max_width = 0
     for field in fields:
-        fieldlen = calc_fieldlen(field, 5)
+        fieldlen = len(field)+1
         if fieldlen > max_width:
             max_width = fieldlen
     # Header
     res += "="*20 + '\n'
-    res += make_entry("Name: ", "", max_width) + str(person["first_name"])  + '\n'
 
-    res += make_entry("Surname: ", "", max_width) + str(person["last_name"])+ '\n'
-    res += make_entry("uid: ", "", max_width) + str(person["id"])+ '\n'
-    res += "="*20+ '\n'
+    res += make_entry("Name: ", "", max_width) + \
+        str(person["first_name"]) + '\n'
+
+    res += make_entry("Surname: ", "", max_width) + \
+        str(person["last_name"]) + '\n'
+
+    res += make_entry("uid: ", "", max_width) + \
+        str(person["id"]) + '\n'
+
+    res += "="*20 + '\n'
 
     # Requested info
     for field in fields:
         if field not in ['first_name', 'last_name', 'id']:
-            res += make_entry(str(field) + ": ", "", max_width) + \
-                   user_dict_to_data(person, field)+ '\n'
-    res += "="*20+ '\n'
+            res += ("%" + str(max_width) + "s") % str(field) + ": " + \
+                   user_dict_to_data(person, field) + '\n'
+    res += "="*20 + '\n'
     return res

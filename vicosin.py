@@ -83,12 +83,30 @@ elif command == 'friends':
 
 elif command == "profile":
     if args.fields:
-        fields = args.fields
+        fields = args.fields.split(",")
     else:
         fields = ['first_name', 'last_name', 'id']
     person_dict = processor.get_user(args.user_id, fields)
     person_out = data_parser.parse_user_info(person_dict, fields)
     print(person_out)
+
+elif command == "chatlist":
+    me = processor.get_user("", ["first_name", "last_name"])
+    me_out = data_parser.parse_user_info(me)
+
+    print(me_out)
+    # Rewrite this part later please
+    print("#\tTitle")
+    for i in range(1, 1000000):
+        chat = processor.get_chat_info(i)
+        chat_info = chat["response"]
+        print("%4s" % chat_info["id"] + '\t' + "%20s" % chat_info["title"])
+
+    print("="*28)
+    exit()
+
+elif command == "chat":
+    pass
 
 else:
     print("Unknown command")
